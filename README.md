@@ -1,4 +1,39 @@
+# ROS2 hand-eye calibration
+This is a minimal ROS2 port of the functionality in the easy_handeye calibration package. The original README can be found below.
 
+## Usage
+**Launch file**
+```bash
+ros2 launch hand_eye_calibration calibration.launch.py
+```
+Launch file arguments:
+- **tracking_base_frame**: optical origin TF frame name
+- **tracking_marker_frame**: marker TF frame name
+- **robot_base_frame**: robot base TF frame name
+- **robot_effector_frame**: end-effector TF frame name (or any frame ridigly connected to the tracking_marker_frame)
+- **calibration_type**: either `eye-on-base` or `eye-in-hand` (see below)
+
+
+**Required components**   
+This node assumes that the TF between the `robot_base_frame` and the `robot_effector_frame` and the TF between the `tracking_base_frame` and `tracking_marker_frame` are being published. For AprilTag markers, the latter TF can be obtained for example by using a ros Apriltag detector node (e.g. [here](https://github.com/wep21/apriltag_ros/tree/ros2-port) or [here](https://github.com/christianrauch/apriltag_ros)). If the TFs are not available, the node will crash when you attempt to take a sample.
+
+
+**Taking samples**
+```bash
+ros2 service call /hand_eye_calibration/capture_point std_srvs/srv/Trigger {}
+```
+For each `Trigger` service call, the ROS node will query the TF tree. When the number of samples is more then three, the node returns the current calibration estimate at every service call. All information is also printed to screen by the node. 
+
+**Note**: Ideally, you should collect at least 15 samples, and check for convergence of the calibration estimate.    
+**Note**: Please encure the robot is still when triggering each capture.
+
+
+------------------------------------------------
+<br/><br/>
+
+
+
+# ORIGINAL README
 # easy_handeye: automated, hardware-independent Hand-Eye Calibration
 
 <img src="docs/img/eye_on_base_ndi_pic.png" width="345"/> <img src="docs/img/05_calibrated_rviz.png" width="475"/> 
