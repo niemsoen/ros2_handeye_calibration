@@ -34,7 +34,18 @@ def tf_to_urdf_tf(mlist: list):
     Transform tx, ty, tz, qx, qy, qz, qw into tx, ty, tz, r, p, y
     """
     res = mlist[0:3]
-    res += list(Rot.from_quat(mlist[3:]).as_euler(seq="ZYX"))
+
+    e = list(Rot.from_quat(mlist[3:]).as_euler(seq="ZYX"))
+    """
+    The roll-pitchRyaw axes in a typical URDF are defined as a
+    rotation of ``r`` radians around the x-axis followed by a rotation of
+    ``p`` radians around the y-axis followed by a rotation of ``y`` radians
+    around the z-axis. These are the Z1-Y2-X3 Tait-Bryan angles. See
+    Wikipedia_ for more information.
+    .. _Wikipedia: https://en.wikipedia.org/wiki/Euler_angles#Rotation_matrix
+    """
+    r, p, y = e[2], e[1], e[0]
+    res += [r, p, y]
     return res
 
 def tf_to_string(tf_stamped_message: TransformStamped):
