@@ -6,7 +6,7 @@ Collect poses and perform calibration
 import rclpy
 
 from rclpy.node import Node
-from rclpy.time import Duration
+from rclpy.time import Duration, Time
 from geometry_msgs.msg import TransformStamped, Transform
 from scipy.spatial.transform import Rotation as Rot
 from std_srvs.srv import Trigger
@@ -89,7 +89,7 @@ class DataCollector(Node):
 
     def capture_point_service_callback(self, req: Trigger.Request, resp: Trigger.Response):
         # get transforms 
-        time = self.get_clock().now() - Duration(seconds=1)
+        time = Time(nanoseconds=0)  # get the latest data
 
         try:
             # here we trick the library (it is actually made for eye_in_hand only). Trust me, I'm an engineer

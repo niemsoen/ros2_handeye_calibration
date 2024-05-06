@@ -8,16 +8,16 @@ from launch_ros.actions import Node
 def generate_launch_description():
 
     tracking_base_frame = DeclareLaunchArgument('tracking_base_frame', 
-                                                 default_value="kinect_rgb_camera_link",
+                                                 default_value="rgb_camera_link",
                                                  description="e.g. camera frame")
     tracking_marker_frame = DeclareLaunchArgument('tracking_marker_frame',
-                                                  default_value="tag_2")
+                                                  default_value="calibboard")
     robot_base_frame = DeclareLaunchArgument('robot_base_frame',
-                                             default_value="base_link")
+                                             default_value="ur5/base_link")
     robot_effector_frame = DeclareLaunchArgument('robot_effector_frame',
-                                                 default_value="gripper_r_base")
+                                                 default_value="ur5/tool0")
     calibration_type = DeclareLaunchArgument('calibration_type',
-                                             default_value="eye-on-base",
+                                             default_value="eye-in-hand",
                                              description="Options are eye-in-hand or eye-on-base")
 
     calibration_node = Node(
